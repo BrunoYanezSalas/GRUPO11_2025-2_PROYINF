@@ -43,7 +43,7 @@ Para el semestre 2025-2, el grupo busca **fortalecer el despliegue en producció
 
 - Matías Alejandro Ramos Echeverría - Rol: 202230512-6
 - Bruno Alejandro Yañez Salas - Rol: 202230528-2
-- Ignacio Fernando Cubillos Leal - Rol: 
+- Ignacio Fernando Cubillos Leal - Rol: 202230523-1
 - **Tutor:** Carlos Arévalo
 
 ---
