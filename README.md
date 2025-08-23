@@ -18,11 +18,10 @@ Características principales:
 Esta iniciativa busca potenciar la preparación de los estudiantes de enseñanza media para la PAES, entregando una herramienta útil tanto para docentes como para alumnos, con foco en la mejora continua del aprendizaje.
 ## Integrantes del Equipo
 
-- Franciso Alejandro Espinosa Ramirez - Rol: 202130523-8 
-- Bastian Ignacio Torres Campillay - Rol: 202204637-6
-- Bastián Ulloa Hernandez - Rol: 202130532-7
-- Jorge Ríos Cueva - Rol: 202204564-7
-- **Tutor:** Benjamin Daza Jimenez 
+- Matías Alejandro Ramos Echeverría - Rol: 202230512-6
+- Bruno Alejandro Yañez Salas- Rol: 
+- Ignacio Fernando Cubillos Leal - Rol: 
+- **Tutor:** Carlos Arévalo
 
 
 ## Arquitectura Técnica
