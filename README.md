@@ -19,7 +19,7 @@ Esta iniciativa busca potenciar la preparación de los estudiantes de enseñanza
 ## Integrantes del Equipo
 
 - Matías Alejandro Ramos Echeverría - Rol: 202230512-6
-- Bruno Alejandro Yañez Salas- Rol: 
+- Bruno Alejandro Yañez Salas- Rol: 202230528-2
 - Ignacio Fernando Cubillos Leal - Rol: 
 - **Tutor:** Carlos Arévalo
 
