@@ -91,7 +91,7 @@ El prototipo permite:
 
 ## Wiki del Proyecto
 
-[Enlace a la Wiki del proyecto](https://github.com/frkalejandro/GRUPO04-2025-PROYINF/wiki)
+[Enlace a la Wiki del proyecto]()
 
 ---
 
