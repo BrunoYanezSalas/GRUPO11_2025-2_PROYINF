@@ -1,73 +1,107 @@
-// src/SeguimientoEstudiante.jsx
-import React, { useEffect, useState } from 'react';
-import API from './api';
-import { useUser } from './UserContext';
+// frontend-paes/src/SeguimientoEstudiante.jsx
 
-function SeguimientoEstudiante() {
-  const { user } = useUser();
+import React, { useState, useEffect } from 'react';
+import { getEstudiantes, getSeguimientoEstudiante } from './api';
+
+const SeguimientoEstudiante = () => {
   const [estudiantes, setEstudiantes] = useState([]);
-  const [usuarioId, setUsuarioId] = useState('');
-  const [datos, setDatos] = useState(null);
+  const [selectedStudentId, setSelectedStudentId] = useState('');
+  const [seguimiento, setSeguimiento] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  // Cargar estudiantes al iniciar
+  // Cargar la lista de estudiantes al montar el componente
   useEffect(() => {
-    const cargarEstudiantes = async () => {
+    const loadEstudiantes = async () => {
       try {
-        const res = await API.get('/usuarios?rol=estudiante');
-        setEstudiantes(res.data);
+        const data = await getEstudiantes();
+        setEstudiantes(data);
       } catch (err) {
-        alert('❌ Error al cargar estudiantes');
+        setError('No se pudo cargar la lista de estudiantes.');
       }
     };
-    cargarEstudiantes();
+    loadEstudiantes();
   }, []);
 
-  const cargarSeguimiento = async () => {
+  // Manejar el cambio en el selector de estudiante
+  const handleStudentChange = async (e) => {
+    const studentId = e.target.value;
+    setSelectedStudentId(studentId);
+    
+    if (!studentId) {
+      setSeguimiento(null);
+      setError('');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+    setSeguimiento(null);
+
     try {
-      const res = await API.get(`/respuestas/ultimo/${usuarioId}`);
-      setDatos(res.data);
+      const data = await getSeguimientoEstudiante(studentId);
+      if (data) {
+        setSeguimiento(data);
+      } else {
+        setError('Este estudiante aún no ha rendido ningún ensayo.');
+      }
     } catch (err) {
-      alert('❌ No se pudo cargar el rendimiento del estudiante');
+      setError('Error al obtener el rendimiento del estudiante.');
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (user?.rol !== 'docente') {
-    return <p>🔒 Solo los docentes pueden acceder al seguimiento de estudiantes.</p>;
-  }
-
   return (
     <div>
-      <h2>👨‍🏫 Seguimiento de Estudiantes</h2>
+      <h2>Seguimiento de Estudiantes</h2>
+      
+      {/* Selector de Estudiantes */}
+      <div style={{ marginBottom: '20px' }}>
+        <label htmlFor="student-select">Selecciona un estudiante: </label>
+        <select id="student-select" value={selectedStudentId} onChange={handleStudentChange}>
+          <option value="">-- Elige un estudiante --</option>
+          {estudiantes.map((est) => (
+            <option key={est.id} value={est.id}>
+              {est.nombre} (ID: {est.id})
+            </option>
+          ))}
+        </select>
+      </div>
 
-      <select value={usuarioId} onChange={e => setUsuarioId(e.target.value)} required>
-        <option value=''>-- Selecciona un estudiante --</option>
-        {estudiantes.map(est => (
-          <option key={est.id} value={est.id}>
-            {est.nombre} (ID: {est.id})
-          </option>
-        ))}
-      </select>
+      {/* Muestra de Resultados */}
+      {loading && <p>Cargando...</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
 
-      <button onClick={cargarSeguimiento} disabled={!usuarioId}>
-        Ver Rendimiento
-      </button>
-
-      {datos && (
+      {seguimiento && (
         <div>
-          <h3>📄 Último Ensayo: {datos.ensayo?.titulo} ({datos.ensayo?.materia})</h3>
-          <ul>
-            {datos.respuestas.map((r, idx) => (
-              <li key={idx}>
-                <strong>{r.pregunta}</strong><br />
-                Seleccionada: <code>{r.seleccionada}</code>{' '}
-                — {r.correcta ? '✅ Correcta' : '❌ Incorrecta'}
-              </li>
-            ))}
-          </ul>
+          <h3>Último Ensayo Rendido: {seguimiento.nombreEnsayo}</h3>
+          <table border="1" style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr>
+                <th>Pregunta</th>
+                <th>Respuesta del Estudiante</th>
+                <th>Respuesta Correcta</th>
+                <th>Resultado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {seguimiento.respuestas.map((item) => (
+                <tr key={item.preguntaId}>
+                  <td>{item.enunciado}</td>
+                  <td>{item.respuestaEstudiante}</td>
+                  <td>{item.alternativaCorrecta}</td>
+                  <td style={{ color: item.esCorrecta ? 'green' : 'red', fontWeight: 'bold' }}>
+                    {item.esCorrecta ? 'Correcta' : 'Incorrecta'}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
   );
-}
+};
 
 export default SeguimientoEstudiante;

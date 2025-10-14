@@ -25,5 +25,16 @@ router.post('/login', async (req, res) => {
     res.status(401).json({ error: 'Credenciales inválidas' });
   }
 });
-
+router.get('/estudiantes', async (req, res) => {
+  try {
+    const estudiantes = await Usuario.findAll({
+      where: { rol: 'estudiante' },
+      attributes: ['id', 'nombre'] // Solo enviamos el ID y el nombre
+    });
+    res.json(estudiantes);
+  } catch (error) {
+    console.error("Error al obtener estudiantes:", error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
 module.exports = router;
