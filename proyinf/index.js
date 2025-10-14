@@ -29,9 +29,11 @@ app.get('/', (req, res) => {
 
 // Sincronizar con base de datos y lanzar servidor
 db.sequelize.sync().then(() => {
-  app.listen(port, () => {
-    console.log(`✅ App corriendo en http://localhost:${port}`);
-  });
+// LÍNEA CORRECTA
+const PORT = 5000;
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
+});
 }).catch(err => {
   console.error('❌ Error al conectar con la base de datos:', err);
 });
