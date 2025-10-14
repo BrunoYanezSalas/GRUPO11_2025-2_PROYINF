@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const { Respuesta } = require('../models');
 const { Resultado, Respuesta, Pregunta, Ensayo, Usuario } = require('../models');
 router.get('/:usuarioId/:ensayoId', async (req, res) => {
   const { usuarioId, ensayoId } = req.params;
