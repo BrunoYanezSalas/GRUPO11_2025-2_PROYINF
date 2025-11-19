@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { Resultado, Respuesta, Pregunta, Ensayo, Usuario } = require('../models');
+const sequelize = require('sequelize'); // Importar sequelize para fn()
+const { Resultado, Respuesta, Pregunta, Ensayo, Usuario, Alternativa } = require('../models');
+
+// RUTA 1: Reporte de puntaje para UN estudiante en UN ensayo (YA LA TENÍAS)
 router.get('/:usuarioId/:ensayoId', async (req, res) => {
   const { usuarioId, ensayoId } = req.params;
 
@@ -24,7 +27,8 @@ router.get('/:usuarioId/:ensayoId', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-// GET para seguimiento de un estudiante específico
+
+// RUTA 2: Seguimiento detallado para UN estudiante (YA LA TENÍAS)
 router.get('/seguimiento/:usuarioId', async (req, res) => {
   const { usuarioId } = req.params;
 
@@ -77,4 +81,18 @@ router.get('/seguimiento/:usuarioId', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener el seguimiento del estudiante' });
   }
 });
-module.exports = router;
+
+/**
+ * ==============================================================
+ * RUTA PARA HITO 4 (REPORTE DEL PROFESOR - VERSIÓN OPTIMIZADA)
+ * ==============================================================
+ */
+router.get('/profesor/:ensayoId', async (req, res) => {
+  try {
+    const { ensayoId } = req.params;
+
+    // Esta es la consulta optimizada que reemplaza el bucle N+1
+    const reporte = await Pregunta.findAll({
+      where: { ensayoId: ensayoId },
+      attributes: [
+        'id',
