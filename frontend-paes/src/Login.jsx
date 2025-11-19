@@ -1,7 +1,7 @@
 // src/Login.jsx
 import React, { useState } from 'react';
 import API from './api';
-import { useUser } from './UserContext'; // 👈 importar contexto
+import { useUser } from './UserContext'; // importar contexto
 
 function Login() {
   const [form, setForm] = useState({
@@ -9,7 +9,7 @@ function Login() {
     password: ''
   });
 
-  const { setUser } = useUser(); // 👈 usamos el setter del contexto
+  const { setUser } = useUser(); //  usamos el setter del contexto
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -18,10 +18,13 @@ function Login() {
     e.preventDefault();
     try {
       const res = await API.post('/usuarios/login', form);
-      setUser(res.data.usuario); // 👈 guardamos al usuario en contexto
+      setUser(res.data.usuario); //  guardamos al usuario en contexto
       alert('✅ Login exitoso: ' + res.data.usuario.nombre);
     } catch (err) {
-      alert('❌ Credenciales inválidas');
+      // 1. Registrar el error completo en la consola para depuración
+      console.error('Login fallido:', err); 
+      // 2. Notificar al usuario (se mantiene el alert para UX)
+      alert('❌ Credenciales inválidas'); 
     }
   };
 
