@@ -1,7 +1,10 @@
 // src/EditarPregunta.jsx
+
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types'; // 1. Importar PropTypes para la validación
 import API from './api';
 
+// El componente recibe y usa las props preguntaId y onVolver
 function EditarPregunta({ preguntaId, onVolver }) {
   const [pregunta, setPregunta] = useState(null);
   const [form, setForm] = useState({
@@ -27,6 +30,8 @@ function EditarPregunta({ preguntaId, onVolver }) {
           correcta: p.correcta
         });
       } catch (err) {
+        // 2. Manejo de error mejorado: loguear el error y notificar
+        console.error('Error al cargar la pregunta:', err);
         alert('❌ Error al cargar la pregunta');
       }
     };
@@ -52,6 +57,8 @@ function EditarPregunta({ preguntaId, onVolver }) {
       alert('✅ Pregunta actualizada correctamente');
       if (onVolver) onVolver();
     } catch (err) {
+      // 2. Manejo de error mejorado: loguear el error y notificar
+      console.error('Error al actualizar pregunta:', err);
       alert('❌ Error al actualizar pregunta');
     }
   };
@@ -76,5 +83,13 @@ function EditarPregunta({ preguntaId, onVolver }) {
     </form>
   );
 }
+
+// 1. Validación de Propiedades para mejorar la Mantenibilidad y Fiabilidad
+EditarPregunta.propTypes = {
+  // preguntaId es esencial y debe ser de tipo string o number
+  preguntaId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired, 
+  // onVolver es opcional, pero si se pasa, debe ser una función
+  onVolver: PropTypes.func, 
+};
 
 export default EditarPregunta;
